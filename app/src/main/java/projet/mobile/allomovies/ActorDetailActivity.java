@@ -54,7 +54,7 @@ public class ActorDetailActivity extends BaseActivity {
         recyclerViewTVShows = findViewById(R.id.actor_detail_movies);
 
         // Configure the RecyclerView for displaying the TV shows
-        recyclerViewTVShows.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewTVShows.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Récupérer les données passées depuis DetailActivity
         Intent intent = getIntent();
@@ -66,8 +66,6 @@ public class ActorDetailActivity extends BaseActivity {
             fetchActorDetails(actorId);
             fetchActorMovieCredits(actorId);
         }
-
-
     }
 
     private void fetchActorDetails(int actorId) {
@@ -174,7 +172,7 @@ public class ActorDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSearchButtonClick() {
+    protected void performSearch(String searchText) {
 
     }
 }

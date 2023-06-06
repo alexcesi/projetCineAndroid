@@ -23,7 +23,8 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private TVShowAdapter tvShowAdapter;
-    private List<TVShow> tvShows;
+    private List<TVShow> tvShows; // Liste complète des films non filtrés
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +32,28 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         tvShows = new ArrayList<>();
+
         tvShowAdapter = new TVShowAdapter(MainActivity.this, tvShows);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(tvShowAdapter);
-        fetchTVShows();
+        fetchTVShows("");
 
         setHomeButtonClickListener();
         setBackButtonClickListener();
         setSearchButtonClickListener();
     }
 
-    private void fetchTVShows() {
+    private void fetchTVShows(String searchText) {
         OkHttpClient client = new OkHttpClient();
 
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=9701cb9919bdf284985fae99ae807582";
+        String url;
+        if (searchText.isEmpty()) {
+            url = "https://api.themoviedb.org/3/movie/popular?api_key=9701cb9919bdf284985fae99ae807582";
+        } else {
+            url = "https://api.themoviedb.org/3/search/movie?api_key=9701cb9919bdf284985fae99ae807582&query=" + searchText;
+        }
 
         Request request = new Request.Builder()
                 .url(url)
@@ -106,7 +113,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSearchButtonClick() {
+    protected void performSearch(String searchText) {
 
     }
 }

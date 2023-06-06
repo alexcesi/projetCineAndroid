@@ -1,38 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/actionBar"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
-    android:background="@color/teal_200">
+    android:orientation="vertical">
 
-    <!-- Bouton Back -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/actionBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/back"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_alignParentStart="true"
-        android:onClick="onBackButtonClick"/>
+        android:padding="10dp"
+        android:background="@color/teal_200">
 
-    <!-- Bouton Home -->
-    <ImageButton
-        android:id="@+id/btnHome"
-        android:layout_width="wrap_content"
+        <!-- Bouton Back -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentStart="true"
+            android:onClick="onBackButtonClick"/>
+
+        <!-- Bouton Home -->
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/home"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_centerInParent="true"
+            android:onClick="onHomeButtonClick"/>
+
+        <!-- Bouton Search -->
+        <ImageButton
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignParentEnd="true"
+            android:onClick="toggleSearchEditText" />
+
+    </RelativeLayout>
+
+    <!-- EditText de recherche -->
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/home"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_centerInParent="true"
-        android:onClick="onHomeButtonClick"/>
+        android:hint="Search for a movie or actor"
+        android:inputType="text"
+        android:visibility="gone" />
 
-    <!-- Bouton Search -->
-    <ImageButton
-        android:id="@+id/btnSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/search"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_alignParentEnd="true" />
-
-</RelativeLayout>
+</LinearLayout>

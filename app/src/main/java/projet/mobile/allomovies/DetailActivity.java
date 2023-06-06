@@ -178,9 +178,8 @@ public class DetailActivity extends BaseActivity {
         });
     }
 
-
     @Override
-    protected void onSearchButtonClick() {
+    protected void performSearch(String searchText) {
 
     }
 }
