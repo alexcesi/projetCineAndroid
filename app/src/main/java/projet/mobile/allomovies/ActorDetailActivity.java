@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +27,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class ActorDetailActivity extends AppCompatActivity {
+public class ActorDetailActivity extends BaseActivity {
     private List<TVShow> tvShows = new ArrayList<>();
     private TextView textViewActorName;
     private TextView textViewActorCharacter;
@@ -41,6 +40,10 @@ public class ActorDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actor_detail);
+
+        setHomeButtonClickListener();
+        setBackButtonClickListener();
+        setSearchButtonClickListener();
 
         // Initialize the views
         textViewActorName = findViewById(R.id.actor_detail_name);
@@ -63,6 +66,8 @@ public class ActorDetailActivity extends AppCompatActivity {
             fetchActorDetails(actorId);
             fetchActorMovieCredits(actorId);
         }
+
+
     }
 
     private void fetchActorDetails(int actorId) {
@@ -166,5 +171,10 @@ public class ActorDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onSearchButtonClick() {
+
     }
 }

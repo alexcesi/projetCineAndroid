@@ -1,7 +1,6 @@
 package projet.mobile.allomovies;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private TVShowAdapter tvShowAdapter;
     private List<TVShow> tvShows;
 
@@ -37,8 +36,11 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(tvShowAdapter);
-
         fetchTVShows();
+
+        setHomeButtonClickListener();
+        setBackButtonClickListener();
+        setSearchButtonClickListener();
     }
 
     private void fetchTVShows() {
@@ -103,9 +105,8 @@ public class MainActivity extends AppCompatActivity {
         return tvShows;
     }
 
+    @Override
+    protected void onSearchButtonClick() {
 
-
-
-
-
+    }
 }

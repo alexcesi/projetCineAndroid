@@ -1,7 +1,6 @@
 package projet.mobile.allomovies;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,10 +25,8 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import projet.mobile.allomovies.ActorAdapter;
-import projet.mobile.allomovies.R;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
     private TextView textViewOriginalTitle;
     private TextView textViewOverview;
     private ImageView imageViewPoster;
@@ -38,7 +35,12 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail);
+
+        setHomeButtonClickListener();
+        setBackButtonClickListener();
+        setSearchButtonClickListener();
 
         // Récupérer les références des vues dans le layout
         textViewOriginalTitle = findViewById(R.id.detail_original_title);
@@ -51,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // Récupérer les données passées depuis MainActivity
         Intent intent = getIntent();
+
         if (intent != null && intent.getExtras() != null) {
             String originalTitle = intent.getStringExtra("original_title");
             String overview = intent.getStringExtra("overview");
@@ -173,5 +176,11 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    @Override
+    protected void onSearchButtonClick() {
+
     }
 }
