@@ -74,7 +74,7 @@ public class DetailActivity extends BaseActivity {
     private void fetchMovieDetails(int movieId) {
         OkHttpClient client = new OkHttpClient();
 
-        String url = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=9701cb9919bdf284985fae99ae807582";
+        String url = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=4e2c4790a1f78ff4fcc8260201e02446";
 
         Request request = new Request.Builder()
                 .url(url)
