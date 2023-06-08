@@ -5,12 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.TextView.OnEditorActionListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -31,6 +41,7 @@ public class MainActivity extends BaseActivity {
     private TVShowAdapter tvShowAdapter;
     private List<TVShow> tvShows; // Liste complète des films non filtrés
     private Spinner spinnerYear;
+    private EditText searchEditText; // Champ de recherche
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +63,52 @@ public class MainActivity extends BaseActivity {
 
         setHomeButtonClickListener();
         setBackButtonClickListener();
-        setSearchButtonClickListener();
+
+        searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchText = searchEditText.getText().toString().trim();
+                    performSearch(searchText);
+                    hideKeyboard(searchEditText);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ImageButton searchButton = findViewById(R.id.btnSearch);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = searchEditText.getText().toString().trim();
+                if (searchEditText.getVisibility() == View.GONE) {
+                    // Afficher le champ de recherche et ouvrir le clavier virtuel
+                    searchEditText.setVisibility(View.VISIBLE);
+                    searchEditText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                } else if (!searchText.isEmpty()) {
+                    // Fermer le clavier virtuel et effectuer la recherche
+                    hideKeyboard(searchEditText);
+                    performSearch(searchText);
+                }
+            }
+        });
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getExtras() != null) {
+            String searchText = intent.getStringExtra("search_text");
+            if (searchText != null && !searchText.isEmpty()) {
+                // Effectuer la recherche avec le terme filtré
+                performSearch(searchText);
+                // Effacer l'intent pour éviter de refaire la recherche lors de la rotation de l'appareil
+                setIntent(new Intent());
+            }
+        }
     }
 
     private void setupYearSpinner() {
@@ -95,6 +151,9 @@ public class MainActivity extends BaseActivity {
 
         String url;
         if (selectedYear.equals("Toutes les années")) {
+            url = "https://api.themoviedb.org/3/movie/popular?api_key=4e2c4790a1f78ff4fcc8260201e02446";
+
+        if (searchText.isEmpty()) {
             url = "https://api.themoviedb.org/3/movie/popular?api_key=4e2c4790a1f78ff4fcc8260201e02446";
         } else {
             url = "https://api.themoviedb.org/3/discover/movie?api_key=4e2c4790a1f78ff4fcc8260201e02446&primary_release_year=" + selectedYear;
@@ -160,5 +219,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void performSearch(String searchText) {
         // Ajoutez le code pour effectuer une recherche
+        Log.d("Search Text", searchText);
+        fetchTVShows(searchText.trim());
     }
 }
