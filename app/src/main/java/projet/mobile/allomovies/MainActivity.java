@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
         spinnerYear = findViewById(R.id.spinner_year);
         setupYearSpinner();
 
-        fetchTVShows("");
+        fetchTVShows("", "");
 
         setHomeButtonClickListener();
         setBackButtonClickListener();
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedYear = parent.getItemAtPosition(position).toString();
-                fetchTVShows(selectedYear);
+                fetchTVShows("", selectedYear);
             }
 
             @Override
@@ -146,17 +146,14 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void fetchTVShows(String selectedYear) {
+    private void fetchTVShows(String searchText, String selectedYear) {
         OkHttpClient client = new OkHttpClient();
 
         String url;
-
-        if (searchText.isEmpty()) {
-            url = "https://api.themoviedb.org/3/movie/popular?api_key=9701cb9919bdf284985fae99ae807582";
-        if (selectedYear.equals("Toutes les années")) {
-            url = "https://api.themoviedb.org/3/movie/popular?api_key=9701cb9919bdf284985fae99ae807582";
+        if (!selectedYear.equals("Toutes les années")){
+            url = !searchText.isEmpty() ? "https://api.themoviedb.org/3/search/movie?api_key=9701cb9919bdf284985fae99ae807582&query=" + searchText : "https://api.themoviedb.org/3/discover/movie?api_key=9701cb9919bdf284985fae99ae807582&primary_release_year=" + selectedYear;
         } else {
-            url = "https://api.themoviedb.org/3/discover/movie?api_key=9701cb9919bdf284985fae99ae807582&primary_release_year=" + selectedYear;
+            url = "https://api.themoviedb.org/3/movie/popular?api_key=9701cb9919bdf284985fae99ae807582";
         }
 
         Request request = new Request.Builder()
@@ -219,7 +216,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void performSearch(String searchText) {
         Log.d("Search Text", searchText);
-        fetchTVShows(searchText.trim());
+        fetchTVShows(searchText.trim(), "");
         // Ajoutez le code pour effectuer une recherche
     }
 }
