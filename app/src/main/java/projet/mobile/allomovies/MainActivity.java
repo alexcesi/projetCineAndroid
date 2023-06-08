@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity {
 
         String url;
         if (!selectedYear.equals("Toutes les années")){
-            url = !searchText.isEmpty() ? "https://api.themoviedb.org/3/search/movie?api_key=9701cb9919bdf284985fae99ae807582&query=" + searchText : "https://api.themoviedb.org/3/discover/movie?api_key=4e2c4790a1f78ff4fcc8260201e02446&primary_release_year=" + selectedYear;
+            url = !searchText.isEmpty() ? "https://api.themoviedb.org/3/search/movie?api_key=4e2c4790a1f78ff4fcc8260201e02446&query=" + searchText : "https://api.themoviedb.org/3/discover/movie?api_key=4e2c4790a1f78ff4fcc8260201e02446&primary_release_year=" + selectedYear;
         } else {
             url = "https://api.themoviedb.org/3/movie/popular?api_key=4e2c4790a1f78ff4fcc8260201e02446";
         }
