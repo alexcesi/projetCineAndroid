@@ -1,0 +1,3 @@
+Nous avons choisi d'utiliser les activités plutôt que les fragments, parce qu'après quelques recherches, nous avons constaté qu'utilisé des activités étaient plus adaptées pour des applications dite plus 'simple'.
+
+Nous avions également plus de facilité pour utiliser les activités. Je pense que nous aurions pu faire un mix des deux, affin de pouvoir profiter des avantages des fragments (notament avec la meilleure modularité et réutilisabilité de l'interface utilisateur du côté des fragments)
