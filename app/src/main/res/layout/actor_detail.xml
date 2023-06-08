@@ -82,6 +82,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom" />
 
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search for a movie or actor"
+            android:inputType="text"
+            android:visibility="gone"
+            android:layout_below="@id/actionBar" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

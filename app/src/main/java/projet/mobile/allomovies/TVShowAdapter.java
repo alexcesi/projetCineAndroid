@@ -14,15 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TVShowAdapter extends RecyclerView.Adapter<TVShowAdapter.ViewHolder> {
     private List<TVShow> tvShows;
+    private List<TVShow> filteredTVShows; // Liste des séries télévisées filtrées
     private Context context;
 
     public TVShowAdapter(Context context, List<TVShow> tvShows) {
         this.context = context;
         this.tvShows = tvShows;
+        this.filteredTVShows = new ArrayList<>(tvShows); // Initialise la liste filtrée avec la liste complète
     }
 
     @NonNull
@@ -34,7 +37,7 @@ public class TVShowAdapter extends RecyclerView.Adapter<TVShowAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TVShow tvShow = tvShows.get(position);
+        TVShow tvShow = filteredTVShows.get(position);
 
         String imageUrl = tvShow.getPosterUrl();
         Picasso.get().load(imageUrl).into(holder.imageViewPoster);
@@ -59,16 +62,31 @@ public class TVShowAdapter extends RecyclerView.Adapter<TVShowAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        if (tvShows != null) {
-            return tvShows.size();
-        } else {
-            return 0;
-        }
+        return filteredTVShows.size();
     }
 
     public void setTVShows(List<TVShow> tvShows) {
-        // Définissez la liste des séries télévisées
+        // Définissez la liste complète des séries télévisées
         this.tvShows = tvShows;
+        setTVShowsFiltered(""); // Réinitialise la liste filtrée avec la liste complète
+    }
+
+    public void setTVShowsFiltered(String searchText) {
+        filteredTVShows.clear();
+
+        // Si le texte de recherche est vide, affichez toutes les séries télévisées
+        if (searchText.isEmpty()) {
+            filteredTVShows.addAll(tvShows);
+        } else {
+            // Parcourez toutes les séries télévisées et ajoutez celles qui correspondent au texte de recherche
+            for (TVShow tvShow : tvShows) {
+                if (tvShow.getName().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredTVShows.add(tvShow);
+                }
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,4 +102,3 @@ public class TVShowAdapter extends RecyclerView.Adapter<TVShowAdapter.ViewHolder
         }
     }
 }
-

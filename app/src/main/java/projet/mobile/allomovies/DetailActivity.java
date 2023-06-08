@@ -4,9 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,15 +39,71 @@ public class DetailActivity extends BaseActivity {
     private ImageView imageViewPoster;
     private RecyclerView recyclerViewActors;
 
+    private EditText searchEditText; // Champ de recherche
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         setHomeButtonClickListener();
         setBackButtonClickListener();
-        setSearchButtonClickListener();
+
+        searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchText = searchEditText.getText().toString().trim();
+                    performSearch(searchText);
+                    hideKeyboard(searchEditText);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        ImageButton searchButton = findViewById(R.id.btnSearch);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchText = searchEditText.getText().toString().trim();
+                if (searchEditText.getVisibility() == View.GONE) {
+                    // Afficher le champ de recherche et ouvrir le clavier virtuel
+                    searchEditText.setVisibility(View.VISIBLE);
+                    searchEditText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                } else if (!searchText.isEmpty()) {
+                    // Fermer le clavier virtuel et effectuer la recherche
+                    hideKeyboard(searchEditText);
+                    searchButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String searchText = searchEditText.getText().toString().trim();
+                            if (searchEditText.getVisibility() == View.GONE) {
+                                // Afficher le champ de recherche et ouvrir le clavier virtuel
+                                searchEditText.setVisibility(View.VISIBLE);
+                                searchEditText.requestFocus();
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
+                                }
+                            } else if (!searchText.isEmpty()) {
+                                // Fermer le clavier virtuel et effectuer la recherche
+                                hideKeyboard(searchEditText);
+                                Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+                                intent.putExtra("search_text", searchText);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                }
+            }
+        });
 
         // Récupérer les références des vues dans le layout
         textViewOriginalTitle = findViewById(R.id.detail_original_title);
@@ -69,6 +132,7 @@ public class DetailActivity extends BaseActivity {
             // Charger les acteurs du film (à partir de l'API)
             fetchMovieActors(movieId);
         }
+
     }
 
     private void fetchMovieDetails(int movieId) {
@@ -180,6 +244,8 @@ public class DetailActivity extends BaseActivity {
 
     @Override
     protected void performSearch(String searchText) {
-
+        Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+        intent.putExtra("search_text", searchText.trim());
+        startActivity(intent);
     }
 }
